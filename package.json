@@ -4,8 +4,22 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "start-dev": "NODE_ENV=development nodemon index.js",
+    "test": "NODE_ENV=test mocha"
   },
   "author": "Sarju",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nodemon": "^1.18.4"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "morgan": "^1.9.1"
+  }
 }
