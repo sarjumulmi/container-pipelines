@@ -1,0 +1,11 @@
+box:
+  id: node:latest
+  ports:
+    - "8000"
+
+dev:
+  steps:
+    - npm-install
+    - internal/watch:
+      code: node index.js
+      reload: true
