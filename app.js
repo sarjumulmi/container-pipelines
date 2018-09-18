@@ -1,8 +1,8 @@
-import express from 'express';
-import bodyparser from 'body-parser';
-import morgan from 'morgan';
-import fs from 'fs';
-import path from 'path';
+const express = require('express');
+const bodyparser = require('body-parser');
+const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const router = express.Router();
@@ -18,7 +18,7 @@ let rawdata = fs.readFileSync(dataPath, 'utf8');
 let cache = JSON.parse(rawdata);
 
 router.get('/', (req, res) => {
-  res.json(cache)
+  res.status(200).json(cache);
 });
 
 // router.post('/add', (req, res) => {
@@ -28,7 +28,7 @@ router.get('/', (req, res) => {
 //     }
 //   }
 //   fs.writeFileSync(dataPath, JSON.stringify(cache));
-//   res.json(cache);
+//   res.status(200).json(cache);
 // })
 
 app.use(router);
@@ -38,4 +38,7 @@ const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log(`App runnning on port ${port}`)
 })
+
+module.exports = app;
+
 
