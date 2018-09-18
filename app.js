@@ -21,15 +21,15 @@ router.get('/', (req, res) => {
   res.status(200).json(cache);
 });
 
-// router.post('/add', (req, res) => {
-//   for (const key in req.body) {
-//     if (req.body.hasOwnProperty(key)) {
-//       cache[key] = req.body[key]; 
-//     }
-//   }
-//   fs.writeFileSync(dataPath, JSON.stringify(cache));
-//   res.status(200).json(cache);
-// })
+router.post('/add', (req, res) => {
+  for (const key in req.body) {
+    if (req.body.hasOwnProperty(key)) {
+      cache[key] = req.body[key]; 
+    }
+  }
+  fs.writeFileSync(dataPath, JSON.stringify(cache));
+  res.status(200).json(cache);
+})
 
 app.use(router);
 

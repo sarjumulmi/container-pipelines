@@ -43,3 +43,22 @@ describe('/GET', () => {
   });
 
 });
+
+describe('/ADD', () => {
+  beforeEach((done) => {
+    let dataPath = path.join(__dirname,'..', 'data.json');
+    fs.writeFileSync(dataPath, JSON.stringify({hello: 'world'}));
+    done();
+  });
+
+  it('it should ADD new item to cache', () => {
+    chai.request(app)
+    .post('/add')
+    .send({name: 'sarju'})
+    .then(res => {
+      expect(res).to.be.json;
+      res.body.should.be.a('object');
+      res.body.should.have.property('name').eql('sarju');
+    })
+  })
+})
