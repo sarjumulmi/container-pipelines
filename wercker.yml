@@ -16,7 +16,7 @@ build:
   steps:
     - script:
         code: |
-          rm -r node_modules
+          rm -rf node_modules
           export NODE_ENV='test'    
     # A step that executes `npm install` command
     - npm-install
