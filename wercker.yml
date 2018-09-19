@@ -31,3 +31,12 @@ build:
           echo "Build step run successfully"
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
+
+push-to-docker:
+  steps:
+    - internal/docker-push:
+        username: $DOCKER_USERNAME
+        password: $DOCKER_PASSWORD
+        tag: $DOCKER_TAG
+        repository: $DOCKER_REPOSITORY
+        cmd: node pipeline/source/app.js
