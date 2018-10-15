@@ -40,3 +40,14 @@ push-to-docker:
         tag: $DOCKER_TAG
         repository: $DOCKER_REPOSITORY
         cmd: node pipeline/source/app.js
+
+
+push-to-ocir:
+  steps:
+    - internal/docker-push:
+        username: $OCIR_USERNAME
+        password: $OCIR_PASSWORD
+        tag: $OCIR_TAG
+        repository: $OCIR_USERNAME/$OCIR_REPOSITORY
+        registry: https://iad.ocir.io/v2/
+        cmd: node pipeline/source/app.js
