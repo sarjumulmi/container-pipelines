@@ -1,3 +1,4 @@
 node_modules
 .wercker
 package-lock.json
+deployment.*
