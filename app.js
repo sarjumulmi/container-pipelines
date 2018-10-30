@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const morgan = require('morgan');
-// const fs = require('fs');
-// const path = require('path');
+const fs = require('fs');
+const path = require('path');
 
 const app = express();
 const router = express.Router();
@@ -13,10 +13,10 @@ app.use(bodyparser.json());
 app.use(bodyparser.json({type: 'application/json'}));
 app.use(bodyparser.urlencoded({extended:true}))
 
-// let dataPath = path.join(__dirname, 'data.json')
-// let rawdata = fs.readFileSync(dataPath, 'utf8');
-// let cache = JSON.parse(rawdata);
-let cache = {hello: "world", name: "Sarju"}
+let dataPath = path.join(__dirname, 'data.json')
+let rawdata = fs.readFileSync(dataPath, 'utf8');
+let cache = JSON.parse(rawdata);
+// let cache = {hello: "world", name: "Sarju"}
 
 router.get('/', (req, res) => {
   res.status(200).json(cache);
@@ -28,7 +28,7 @@ router.post('/add', (req, res) => {
       cache[key] = req.body[key]; 
     }
   }
-  // fs.writeFileSync(dataPath, JSON.stringify(cache));
+  fs.writeFileSync(dataPath, JSON.stringify(cache));
   res.status(200).json(cache);
 })
 
