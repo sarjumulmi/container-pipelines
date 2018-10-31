@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
+const mysql = require('mysql');
 
 const app = express();
 const router = express.Router();
@@ -13,24 +12,75 @@ app.use(bodyparser.json());
 app.use(bodyparser.json({type: 'application/json'}));
 app.use(bodyparser.urlencoded({extended:true}))
 
-let dataPath = path.join(__dirname, 'data.json')
-let rawdata = fs.readFileSync(dataPath, 'utf8');
-let cache = JSON.parse(rawdata);
-// let cache = {hello: "world", name: "Sarju"}
 
 router.get('/', (req, res) => {
-  res.status(200).json(cache);
+  const conn = mysql.createConnection({
+    host: '129.157.248.192',
+    user: 'sarju',
+    password : 'Oracle123!',
+    database : 'persist'
+  });
+  conn.connect(function(err) {
+    if (err) {
+      console.log(`Error connecting to db: ${err}`);
+      return;
+    }
+    conn.query('SELECT * FROM jsoncache', function(err, results, fields){
+      if (err) {
+        throw err;
+      }
+      conn.end(function(err) {
+        if (err) {
+          console.log(`Error closing to db: ${err}`);
+          return;
+        }
+        let json = {};
+        results.forEach(item => {
+          json[item.k] = item.v
+        });
+        res.send(json);
+      });
+    });
+  }); 
 });
 
 router.post('/add', (req, res) => {
-  for (const key in req.body) {
-    if (req.body.hasOwnProperty(key)) {
-      cache[key] = req.body[key]; 
+  const conn = mysql.createConnection({
+    host: '129.157.248.192',
+    user: 'sarju',
+    password : 'Oracle123!',
+    database : 'persist'
+  });
+  conn.connect(function(err) {
+    if (err) {
+      console.log(`Error connecting to db: ${err}`);
+      return;
     }
-  }
-  fs.writeFileSync(dataPath, JSON.stringify(cache));
-  res.status(200).json(cache);
-})
+    let data = {k: Object.keys(req.body)[0], v: Object.values(req.body)[0]};
+    let json = {};
+    conn.query('INSERT INTO jsoncache SET ?', data, function(err){
+      if (err) {
+        throw err;
+      }
+      conn.query('SELECT * FROM jsoncache', function(error, results) {
+        if (error) {
+          throw error;
+        }
+        results.forEach(item => {
+          json[item.k] = item.v
+        });
+      });
+      conn.end(function(err) {
+        if (err) {
+          console.log(`Error closing to db: ${err}`);
+          return;
+        }
+        console.log(json);
+        res.send(json);
+      });
+    });
+  }); 
+});
 
 app.use(router);
 
